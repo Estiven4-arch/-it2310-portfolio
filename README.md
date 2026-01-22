@@ -1,39 +1,46 @@
-# -it2310-portfolio
-My web design portfolio for IT 2310 at Tri-C
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My First HTML Page</title>
-</head>
+  <!DOCTYPE html> 
 
-<body>
+<html lang="en"> 
 
-    <h1>Welcome to my Web Page</h1>
+<head> 
 
-    <p>
-        In our first lab, we will be learning about various programming languages.
-        This lab focuses on building a web program. It teaches us how to make pages
-        with text, pictures, and links.
-    </p>
+    <meta charset="UTF-8"> 
 
-    <p>
-        I'm excited to learn <strong>how to build a web page</strong> this semester.
-    </p>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-    <a href="https://www.tri-c.edu/programs/information-technology/" target="_blank">
-        Visit Tri-C IT Programs
-    </a>
+    <title>My First HTML Page</title> 
 
-    <br><br>
+</head> 
 
-    <!-- Random image that works on GitHub Pages -->
-    <img src="https://picsum.photos/300/200" alt="Random image">
+<body> 
 
-</body>
-</html>
+    <h1>[Welcome to my page]</h1> 
 
+    
 
-  
+    <p>[This week, you'll build the foundation for everything we do this semester. You'll set up your development environment, create your first HTML page, establish your GitHub portfolio repository, and begin learning prompt engineering skills that will help you work effectively with AI tools throughout the course.]</p> 
+
+    
+
+    <p>I'm excited to learn <strong>[learning how to make a web page]</strong> this semester.</p> 
+
+    
+
+    <a href="https://www.tri-c.edu/programs/information-technology/" target="_blank"> 
+
+        Visit Tri-C IT Programs 
+
+    </a> 
+
+    
+
+    <br><br> 
+
+    
+
+    <img src=" https://images.stockcake.com/public/4/0/3/4035579d-5ff2-427f-95df-a2956753e51d_large/ethereal-purple-flower-stockcake.jpg " alt="[nice flower ]"> 
+
+</body> 
+
+</html> 
