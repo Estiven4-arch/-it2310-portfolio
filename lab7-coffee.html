@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Java Haven</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1008;
+      --espresso: #2C1A0E;
+      --roast: #4A2C17;
+      --caramel: #8B5E3C;
+      --gold: #C9933A;
+      --cream: #F5EDD8;
+      --parchment: #EDE0C4;
+      --steam: #FBF6EC;
+      --white: #FEFCF7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--steam);
+      color: var(--ink);
+      overflow-x: hidden;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas:
+        "header"
+        "nav"
+        "main"
+        "footer";
+      min-height: 100vh;
+    }
+
+    .header  { grid-area: header; }
+    .nav     { grid-area: nav; }
+    .main-content { grid-area: main; }
+    .footer  { grid-area: footer; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    .skip-link { position: absolute; left: -9999px; top: auto; }
+    .skip-link:focus {
+      position: static; padding: .5rem .75rem;
+      background: var(--espresso); color: var(--cream);
+      display: inline-block;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--espresso);
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .header::before, .header::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(201,147,58,0.15);
+    }
+    .header::before { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .header::after  { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+    .header-inner { position: relative; z-index: 1; }
+
+    .header-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s ease forwards;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease forwards;
+    }
+    .header h1 em { font-style: italic; color: var(--gold); }
+
+    .header-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: rgba(245,237,216,0.6);
+      margin-top: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s ease forwards;
+    }
+    .header-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem auto 0;
+      max-width: 200px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.7s ease forwards;
+    }
+    .header-divider::before, .header-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.4;
+    }
+    .header-divider span { color: var(--gold); font-size: 1.1rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── NAV ── */
+    .nav {
+      background: var(--roast);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(201,147,58,0.2);
+    }
+    .nav ul { display: flex; justify-content: center; list-style: none; padding: 0; }
+    .nav a {
+      display: block;
+      color: var(--parchment);
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1.1rem 2rem;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%; right: 50%;
+      height: 2px;
+      background: var(--gold);
+      transition: left 0.25s ease, right 0.25s ease;
+    }
+    .nav a:hover { color: var(--gold); }
+    .nav a:hover::after { left: 1.5rem; right: 1.5rem; }
+
+    /* ── MAIN ── */
+    .main-content { padding: 0 1.5rem 5rem; }
+
+    .featured-heading { text-align: center; padding: 4rem 0 2.5rem; }
+    .featured-heading .label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 0.5rem;
+    }
+    .featured-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--espresso);
+      font-style: italic;
+    }
+
+    /* ── FLEXBOX COFFEE CARDS ── */
+    .flex-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1px;
+      max-width: 900px;
+      margin: 0 auto 1.5rem;
+      background: rgba(74,44,23,0.12);
+      border: 1px solid rgba(74,44,23,0.12);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .flex-item {
+      flex: 1;
+      min-width: 160px;
+      background: var(--white);
+      color: var(--roast);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+    .flex-item::before {
+      content: attr(data-num);
+      position: absolute;
+      top: 0.6rem; right: 0.8rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+    .flex-item .icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.75rem;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .flex-item .name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .flex-item .desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--caramel);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.3s, max-height 0.3s;
+    }
+    .flex-item:hover { background: var(--espresso); color: var(--cream); }
+    .flex-item:hover .name  { color: var(--cream); }
+    .flex-item:hover .desc  { opacity: 1; max-height: 60px; color: var(--parchment); }
+    .flex-item:hover .icon  { transform: scale(1.15); }
+
+    /* ── SECTIONS ── */
+    .section {
+      scroll-margin-top: 80px;
+      max-width: 860px;
+      margin: 3.5rem auto 0;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      writing-mode: vertical-rl;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .section-title-group {
+      border-left: 2px solid var(--gold);
+      padding-left: 1.25rem;
+    }
+    .section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--espresso);
+      line-height: 1.1;
+    }
+    .section-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--caramel);
+      margin-top: 0.2rem;
+    }
+    .section-body {
+      background: var(--white);
+      border: 1px solid rgba(74,44,23,0.1);
+      border-radius: 2px;
+      padding: 2rem 2.25rem 2.25rem;
+    }
+    .section p {
+      font-size: 1.1rem;
+      color: var(--roast);
+      line-height: 1.85;
+    }
+
+    /* ── MENU GRID ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(74,44,23,0.12);
+      overflow: hidden;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(74,44,23,0.08);
+      border-right: 1px solid rgba(74,44,23,0.08);
+      transition: background 0.2s;
+    }
+    .menu-item:nth-child(even)      { border-right: none; }
+    .menu-item:nth-last-child(-n+2) { border-bottom: none; }
+    .menu-item:hover { background: var(--steam); }
+
+    /* Flash gold when scrolled to via card click */
+    .menu-item:target {
+      animation: highlight 2s ease forwards;
+    }
+    .menu-item:target .item-name  { color: var(--cream); }
+    .menu-item:target .item-price { color: var(--gold); }
+
+    @keyframes highlight {
+      0%   { background: var(--gold); }
+      30%  { background: var(--gold); }
+      100% { background: var(--steam); }
+    }
+
+    .menu-item .item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--espresso);
+    }
+    .menu-item .item-price {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+
+    /* ── ABOUT ── */
+    .about-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-style: italic;
+      color: var(--espresso);
+      line-height: 1.5;
+      border-left: 3px solid var(--gold);
+      padding: 1rem 1.5rem;
+      margin: 1.25rem 0;
+      background: var(--steam);
+    }
+
+    /* ── CONTACT ── */
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 1.75rem;
+      border: 1px solid rgba(74,44,23,0.12);
+      overflow: hidden;
+    }
+    .contact-block {
+      flex: 1;
+      min-width: 200px;
+      padding: 1.25rem 1.5rem;
+      border-right: 1px solid rgba(74,44,23,0.1);
+    }
+    .contact-block:last-child { border-right: none; }
+    .contact-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .contact-val { font-size: 1.05rem; color: var(--espresso); }
+    .contact-val a {
+      color: var(--espresso);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .contact-val a:hover { border-color: var(--gold); }
+
+    /* ── FORM ── */
+    .form { margin-top: 1.5rem; }
+    .form-row { margin-bottom: 1rem; }
+    .form-row label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 0.4rem;
+    }
+    .input, .textarea {
+      width: 100%;
+      max-width: 520px;
+      padding: 0.75rem 1rem;
+      background: var(--steam);
+      border: 1px solid rgba(74,44,23,0.2);
+      border-radius: 1px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    .input:focus, .textarea:focus {
+      border-color: var(--gold);
+      background: var(--white);
+    }
+    .textarea { resize: vertical; min-height: 120px; }
+    .btn {
+      margin-top: 0.5rem;
+      background: var(--espresso);
+      color: var(--cream);
+      border: 1px solid var(--roast);
+      padding: 0.85rem 2.25rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .btn:hover {
+      background: var(--gold);
+      color: var(--espresso);
+      border-color: var(--gold);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--espresso);
+      color: rgba(245,237,216,0.5);
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 5rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .footer-rule {
+      width: 60px; height: 1px;
+      background: var(--gold); opacity: 0.4;
+      margin: 1.25rem auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .nav a { padding: 1rem 1.1rem; font-size: 0.6rem; }
+      .flex-container { flex-direction: column; }
+      .flex-item { min-width: 100%; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item { border-right: none !important; }
+      .menu-item:nth-last-child(-n+2) { border-bottom: 1px solid rgba(74,44,23,0.08); }
+      .menu-item:last-child { border-bottom: none; }
+      .contact-block { border-right: none; border-bottom: 1px solid rgba(74,44,23,0.1); }
+      .contact-block:last-child { border-bottom: none; }
+      .section-body { padding: 1.25rem; }
+      .section-header { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <header class="header" role="banner">
+    <div class="header-inner">
+      <p class="header-eyebrow">Est. 2018 · Brewtown, USA</p>
+      <h1>Java<br><em>Haven</em></h1>
+      <div class="header-divider"><span>✦</span></div>
+      <p class="header-sub">Your daily dose of caffeine &amp; comfort.</p>
+    </div>
+  </header>
+
+  <nav class="nav" role="navigation" aria-label="Primary">
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="main" class="main-content" role="main">
+
+    <div class="featured-heading">
+      <p class="label">Signature Offerings</p>
+      <h2>Featured Coffees</h2>
+    </div>
+
+    <div class="flex-container" aria-label="Featured coffee items">
+      <a href="#item-espresso" class="flex-item" data-num="01">
+        <span class="icon">☕</span>
+        <span class="name">Espresso</span>
+        <span class="desc">Pure, intense, concentrated</span>
+      </a>
+      <a href="#item-cappuccino" class="flex-item" data-num="02">
+        <span class="icon">☁️</span>
+        <span class="name">Cappuccino</span>
+        <span class="desc">Silky foam, bold espresso</span>
+      </a>
+      <a href="#item-latte" class="flex-item" data-num="03">
+        <span class="icon">🥛</span>
+        <span class="name">Latte</span>
+        <span class="desc">Smooth, creamy, comforting</span>
+      </a>
+      <a href="#item-mocha" class="flex-item" data-num="04">
+        <span class="icon">🍫</span>
+        <span class="name">Mocha</span>
+        <span class="desc">Chocolate meets espresso</span>
+      </a>
+    </div>
+
+    <section id="menu" class="section" aria-labelledby="menu-heading">
+      <div class="section-header">
+        <span class="section-num">01 / Menu</span>
+        <div class="section-title-group">
+          <h3 id="menu-heading">Our Menu</h3>
+          <p class="section-sub">Espresso, teas &amp; seasonal specials</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>From our single-origin espresso to hand-crafted cold brews, every drink is made to order with care. Seasonal specials rotate monthly.</p>
+        <div class="menu-grid" role="list">
+          <div id="item-espresso" class="menu-item" role="listitem"><span class="item-name">Espresso</span><span class="item-price">$3.00</span></div>
+          <div class="menu-item" role="listitem"><span class="item-name">Americano</span><span class="item-price">$3.25</span></div>
+          <div id="item-cappuccino" class="menu-item" role="listitem"><span class="item-name">Cappuccino</span><span class="item-price">$4.25</span></div>
+          <div id="item-latte" class="menu-item" role="listitem"><span class="item-name">Latte</span><span class="item-price">$4.50</span></div>
+          <div id="item-mocha" class="menu-item" role="listitem"><span class="item-name">Mocha</span><span class="item-price">$4.95</span></div>
+          <div class="menu-item" role="listitem"><span class="item-name">Cold Brew</span><span class="item-price">$4.50</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="section-header">
+        <span class="section-num">02 / Story</span>
+        <div class="section-title-group">
+          <h3 id="about-heading">About Us</h3>
+          <p class="section-sub">Roasted weekly, crafted with care</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <blockquote class="about-quote">"Every cup is a small ritual — a moment to pause, breathe, and taste something made with intention."</blockquote>
+        <p>Java Haven is your neighborhood spot for carefully roasted beans and cozy vibes. We partner with small farms, roast weekly, and craft every cup to order. Our team believes great coffee starts long before the espresso shot — it begins with honest relationships with the growers who tend the land.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="section-header">
+        <span class="section-num">03 / Visit</span>
+        <div class="section-title-group">
+          <h3 id="contact-heading">Contact</h3>
+          <p class="section-sub">We'd love to hear from you</p>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="contact-info">
+          <div class="contact-block">
+            <p class="contact-label">Email</p>
+            <p class="contact-val"><a href="mailto:S01376090@acad.tri-c.edu">S01376090@acad.tri-c.edu</a></p>
+          </div>
+          <div class="contact-block">
+            <p class="contact-label">Phone</p>
+            <p class="contact-val"><a href="tel:+15551234567">(555) 123‑4567</a></p>
+          </div>
+          <div class="contact-block">
+            <p class="contact-label">Address</p>
+            <p class="contact-val">123 Roast St, Brewtown, USA</p>
+          </div>
+        </div>
+
+        <form aria-label="Contact form" class="form" onsubmit="event.preventDefault(); window.location.href='mailto:S01376090@acad.tri-c.edu?subject=Message from Java Haven Website&body=' + encodeURIComponent('Name: ' + document.getElementById('name').value + '\n\nMessage:\n' + document.getElementById('msg').value);">
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" class="input" placeholder="Your name" autocomplete="name"/>
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" class="input" placeholder="you@example.com" autocomplete="email"/>
+          </div>
+          <div class="form-row">
+            <label for="msg">Message</label>
+            <textarea id="msg" name="message" class="textarea" rows="5" placeholder="How can we help?"></textarea>
+          </div>
+          <button type="submit" class="btn">Send Message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <p class="footer-logo">Java Haven</p>
+    <p class="footer-tagline">Your daily dose of caffeine &amp; comfort.</p>
+    <div class="footer-rule"></div>
+    <p class="footer-copy">&copy; 2025 Java Haven · All Rights Reserved · Brewtown, USA</p>
+  </footer>
+
+</body>
+</html>
