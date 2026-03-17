@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8 - Interactive Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #greetingText {
+            font-size: 18px;
+            margin-top: 15px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Page</h1>
+
+    <!-- Original Button -->
+    <button id="nameButton">Click Me!</button>
+
+    <!-- Bonus: Second button -->
+    <button id="jokeButton" style="background-color: #2196F3; margin-left: 15px;">Tell Me a Joke!</button>
+
+    <!-- Bonus: Greeting paragraph -->
+    <p id="greetingText"></p>
+
+    <script>
+        // PART 1: Output your name using document.write
+        document.write("<p>Created by: Cardi B</p>");
+
+        // PART 2: Select buttons using their IDs
+        const button = document.getElementById("nameButton");
+        const jokeButton = document.getElementById("jokeButton");
+        const greetingText = document.getElementById("greetingText");
+
+        // PART 3: Original button - now with bonus features
+        button.addEventListener("click", () => {
+            // Bonus: Change background color when clicked
+            button.style.backgroundColor = "#e91e8c";
+
+            // Prompt the user to enter their name
+            const user = prompt("What is your name?");
+
+            if (user) {
+                // Bonus: Show greeting in a new paragraph instead of button text
+                greetingText.textContent = `Hello, ${user}! Welcome to the page!`;
+
+                // Bonus: Use alert() to greet the user
+                alert(`Nice to meet you, ${user}!`);
+
+                button.textContent = `Hello, ${user}!`;
+            } else {
+                button.textContent = "Click Me!";
+                button.style.backgroundColor = "#4CAF50"; // Reset color
+                greetingText.textContent = "";
+            }
+        });
+
+        // Bonus: Second button that does something different
+        jokeButton.addEventListener("click", () => {
+            jokeButton.style.backgroundColor = "#ff5722";
+            const jokes = [
+                "Why don't scientists trust atoms? Because they make up everything!",
+                "Why did the scarecrow win an award? Because he was outstanding in his field!",
+                "Why don't eggs tell jokes? They'd crack each other up!"
+            ];
+            const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+            greetingText.textContent = randomJoke;
+        });
+    </script>
+</body>
+</html>
